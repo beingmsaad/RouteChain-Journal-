@@ -166,14 +166,14 @@ In \rc, we treat a BGP announcement as a transaction, and {\color{blue} record e
 
 
 
-The premise of our work relies upon a consensus agreement among ASes, prior to the launching of an attack. To that end, we contrast the timings of known BGP attack on Youtube, with the consensus time in \rc. Our results show that while all consensus protocols meet the baseline requirement of preventing the attack, in particular, Clique (a PoA-based protocol) achieves the lowest transaction confirmation time and the maximum transaction throughput.} \rc is incrementally deployable and backwards compatible with the current operations of ASes. ASes can use it in parallel with their current routing policies as an additional security feature. Therefore, \rc does not require ASes to switch from legacy systems to a new protocol paradigm. 
+The premise of our work relies upon a consensus agreement among ASes, prior to the launching of an attack. To that end, we contrast the timings of known BGP attack on Youtube, with the consensus time in \rc. Our results show that while all consensus protocols meet the baseline requirement of preventing the attack, in particular, {\em Clique} (a PoA-based protocol) achieves the lowest transaction confirmation time and the maximum transaction throughput.} \rc is incrementally deployable and backwards compatible with the current operations of ASes. ASes can use it in parallel with their current routing policies as an additional security feature. Therefore, \rc does not require ASes to switch from legacy systems to a new protocol paradigm. 
 
 
 \BfPara{Contributions} We make the following contributions:
 \begin{enumerate*}
     \item We introduce a blockchain-based system called \rc that prevents BGP hijacking.
     \item We set up a testbed in different ASes across the world and evaluate \rc's performance under three blockchain consensus protocols. 
-    \item Our experiments show that \rc can neutralize a BGP hijack attempt in all three consensus protocols. Among them, Clique achieves the best performance due to minimum transaction confirmation latency. 
+    \item Our experiments show that \rc can neutralize a BGP hijack attempt in all three consensus protocols. Among them, {\em Clique} achieves the best performance due to minimum transaction confirmation latency. 
     \item We further demonstrate \rc feasibility by drawing a case study from the well-known Youtube's BGP hijacking case, where \rc is shown to neutralize the attack.  
     \item Our proposed solution is shown to be incrementally deployable; easily implemented alongside existing protocols. 
 \end{enumerate*}
@@ -215,7 +215,7 @@ In complete attacks, the adversarial AS announces more specific prefixes than th
 \subsection{Blockchains} \label{sec:BC}
 Blockchain technology has introduced a new paradigm in distributed systems with applications spanning cryptocurrencies, smart contracts, distributed provenance, and censorship resistance~\cite{NeisseSN17,Omohundro14,GovernatoriIMRS18,AhmadSBM18}. With promising guarantees including immutable and append-only data management in a decentralized system, blockchains are well suited to create provenance and prevent fraud in a trust-less environment. 
 
-Blockchains use various consensus protocols to arbitrate trust among networks and entities. Some of the well-known consensus protocols include the proof-of-work (PoW), proof-of-stake (PoS), proof-of-elapsed time (PoET), proof-of-authority (PoA), and the practical Byzantine fault tolerance (PBFT) \cite{SaadM18,SaadNKM18}. Each consensus protocol its benefits and limitations which we show in~\cite{tab:ca}. Among the five consensus protocols, we selected PoS, PoA (Clique), and PoET for \rc due to (1) high scalability, (2) energy efficiency, (3) scalability, and (4) high throughput.  In the following, we briefly describe key features of the three conseneus protocols.  
+Blockchains use various consensus protocols to arbitrate trust among networks and entities. Some of the well-known consensus protocols include the proof-of-work (PoW), proof-of-stake (PoS), proof-of-elapsed time (PoET), proof-of-authority (PoA), and the practical Byzantine fault tolerance (PBFT) \cite{SaadM18,SaadNKM18}. Each consensus protocol its benefits and limitations which we show in~\cite{tab:ca}. Among the five consensus protocols, we selected PoS, PoA ({\em Clique}), and PoET for \rc due to (1) high scalability, (2) energy efficiency, (3) scalability, and (4) high throughput.  In the following, we briefly describe key features of the three conseneus protocols.  
 
 
 \begin{table*}
@@ -224,7 +224,7 @@ Blockchains use various consensus protocols to arbitrate trust among networks an
 \label{tab:ca} 
 \scalebox{0.99}{
 \begin{tabular}{l|c|c|c|c|c}
-\textbf{Properties}  & \textbf{PoW}       & \textbf{PoS}       & \textbf{PBFT}  & \textbf{Clique}   & \textbf{PoET}  \\ \hline
+\textbf{Properties}  & \textbf{PoW}       & \textbf{PoS}       & \textbf{PBFT}  & \textbf{{\em Clique}}   & \textbf{PoET}  \\ \hline
 \textbf{\begin{tabular}[c]{@{}l@{}}Blockchain Type\\ \end{tabular}}         & Permisssionless & Permissionless & Permissioned & Permissioned & Permissionless       \\ \hline
 \textbf{\begin{tabular}[c]{@{}l@{}}Trust Model\\ \end{tabular}} & Untrusted & Untrusted &  Semi-trusted & Semi-trusted & Untrusted \\ \hline
 \textbf{Scalability}                                                         & High               & High                      & Low  & High & High                      \\ \hline
@@ -240,15 +240,15 @@ Blockchains use various consensus protocols to arbitrate trust among networks an
 
 % \begin{figure}[t]
 % \centering
-% \includegraphics[width=0.45\textwidth]{fig/bgp_clique_roundrobin.pdf}
+% \includegraphics[width=0.45\textwidth]{fig/bgp_{\em Clique}_roundrobin.pdf}
 
-% \caption{Clique uses a round-robin scheme to select primary node, and two secondary nodes, the primary is responsible for proposing a new block. In case of failure of a primary node the block is proposed by the secondary nodes. Note: R1 is the primary and R2 and R3 and secondary for the first epoch, for the second epoch R2 is the primary and R3 and R4 and the secondary. }
-% \label{fig:Clique}
+% \caption{{\em Clique} uses a round-robin scheme to select primary node, and two secondary nodes, the primary is responsible for proposing a new block. In case of failure of a primary node the block is proposed by the secondary nodes. Note: R1 is the primary and R2 and R3 and secondary for the first epoch, for the second epoch R2 is the primary and R3 and R4 and the secondary. }
+% \label{fig:{\em Clique}}
 % \end{figure}
 
 {\color{blue}{
 \BfPara{{\em Clique}} \label{sec:cq}
-{\em Clique} is a PoA-based consensus scheme that is fast, scalable, and has high fault tolerance. In {\em Clique}, a primary replica is selected to order transactions in a block and broadcast that block to the other nodes. Although the process of transaction ordering is similar to PBFT, however, {\em Clique} relies on eventual consistency which reduces the message complexity from  $O(n^2)$ to  $O(1)$, thus favoring scalability. Moreover, unlike PBFT, Clique has a high fault tolerance and it can tolerate up to $f/2$ faulty replicas. In other words, {\em Clique} can prevent a BGP hijack as long as 50\% ASes behave honestly, which is a fair assumption to make in practice. 
+{\em Clique} is a PoA-based consensus scheme that is fast, scalable, and has high fault tolerance. In {\em Clique}, a primary replica is selected to order transactions in a block and broadcast that block to the other nodes. Although the process of transaction ordering is similar to PBFT, however, {\em Clique} relies on eventual consistency which reduces the message complexity from  $O(n^2)$ to  $O(1)$, thus favoring scalability. Moreover, unlike PBFT, {\em Clique} has a high fault tolerance and it can tolerate up to $f/2$ faulty replicas. In other words, {\em Clique} can prevent a BGP hijack as long as 50\% ASes behave honestly, which is a fair assumption to make in practice. 
 
 
 
@@ -352,20 +352,20 @@ In \textsection\ref{sec:mind}, we derive optimal value of the number of subgroup
 \end{center}
 \end{figure}
 
-\begin{figure}[t]
-\begin{center}
-\includegraphics[width=0.45\textwidth]{fig/bgp_clique.pdf}
-\caption{Fork in clique consensus protocol, $AS_2$ is the primary replica who broadcasts a block. Due to delays and latency  $AS_4$ does not get the block on time. Instead it receives the block published by the next primary $AS_3$. This leads to a fork. The fork can be resolved easily by mapping the prior known identity of the primary with the expected block. } 
-\label{fig:Clique_fork}
-\end{center}
-\end{figure}
+% \begin{figure}[t]
+% \begin{center}
+% \includegraphics[width=0.45\textwidth]{fig/bgp_clique.pdf}
+% \caption{Fork in clique consensus protocol, $AS_2$ is the primary replica who broadcasts a block. Due to delays and latency  $AS_4$ does not get the block on time. Instead it receives the block published by the next primary $AS_3$. This leads to a fork. The fork can be resolved easily by mapping the prior known identity of the primary with the expected block. } 
+% \label{fig:Clique_fork}
+% \end{center}
+% \end{figure}
 
 
 
 \subsection{Consensus Mechanism}\label{sec:consen}
 
 
-As mentioned in \textsection\ref{sec:cq}, in use three consensus protocols in \rc. Based on each protocol's specifications, a primary replica $\mathcal{P}_{K}$ is selected from each subgroup $K$ to send transactions to other replicas (ASes) as shown in \autoref{fig:Clique_fork}. $\mathcal{P}_{K}$ is responsible for receiving transactions, ordering transactions, computing a block, and broadcasting it to the other replicas. This process is carried out in one epoch, and at each epoch, a new primary is selected to continue the procedure. 
+As mentioned in \textsection\ref{sec:cq}, in use three consensus protocols in \rc. Based on each protocol's specifications, a primary replica $\mathcal{P}_{K}$ is selected from each subgroup $K$ to send transactions to other replicas (ASes). $\mathcal{P}_{K}$ is responsible for receiving transactions, ordering transactions, computing a block, and broadcasting it to the other replicas. This process is carried out in one epoch, and at each epoch, a new primary is selected to continue the procedure. 
 
 
 
@@ -439,12 +439,12 @@ In a complete transaction life cycle, the transaction will start from an AS with
 
 
 \BfPara{Minimizing Delay}\label{sec:mind}
-To defend against BGP attacks, we want the value of $ \mathcal{T}_{E}$ to be small. From \autoref{eq:3}, it can be observed that propagation delays  $\mathcal{T}_{p}$ linearly contribute the most towards the end-to-end duration of transaction confirmation $\mathcal{T}_{E}$. Therefore, in order to reduce the number of propagation delays, we need to reduce the number of messages required to process a transaction. This depends upon the number of ASes in a subgroup, and the total number of subgroups respectively. We know that in {\em Clique}, $N/2$ messages are required by the primary to commit a transaction (\textsection\ref{sec:consen}). This means that $\mathcal{P}_{A}$ requires approval from 50\% replicas in both hierarchies. If we fix, $K$ subgroups for \rc, the size of each subgroup will be $A/K$, and the number of approvals required will be $A/2K$, since approvals among the subgroups will happen in parallel. Next, $\mathcal{P}_{A}$ also require approvals from $K/2$ subgroups for the global blockchain. Therefore, for a transaction confirmation, in total, $\mathcal{P}_{A}$ requires $A/2K + K/2$ approvals. For simplicity, we assume that each subgroup is uniform in size such that $|k_{1}|=|k_{2}|=|k_{p}|$. Using that and after simplification, we obtain the following equation that shows the total number of approvals required for the transaction commitment $\mathcal{C}$. 
+To defend against BGP attacks, we want the value of $ \mathcal{T}_{E}$ to be small. From \autoref{eq:3}, it can be observed that propagation delays  $\mathcal{T}_{p}$ linearly contribute the most towards the end-to-end duration of transaction confirmation $\mathcal{T}_{E}$. Therefore, in order to reduce the number of propagation delays, we need to reduce the number of messages required to process a transaction. This depends upon the number of ASes in a subgroup, and the total number of subgroups respectively. We note that in \rc, $N/2$ messages are required by the primary to commit a transaction (\textsection\ref{sec:consen}). This means that $\mathcal{P}_{A}$ requires approval from 50\% replicas in both hierarchies. If we fix, $K$ subgroups for \rc, the size of each subgroup will be $A/K$, and the number of approvals required will be $A/2K$, since approvals among the subgroups will happen in parallel. Next, $\mathcal{P}_{A}$ also require approvals from $K/2$ subgroups for the global blockchain. Therefore, for a transaction confirmation, in total, $\mathcal{P}_{A}$ requires $A/2K + K/2$ approvals. For simplicity, we assume that each subgroup is uniform in size such that $|k_{1}|=|k_{2}|=|k_{p}|$. Using that and after simplification, we obtain the following equation that shows the total number of approvals required for the transaction commitment $\mathcal{C}$. 
 \begin{align}\label{eq:4}
 \mathcal{C} = \frac{A }{2K} + \frac{K}{2}= \frac{A + K^{2}}{2K}
 \end{align}
 
-From \autoref{eq:4}, our objective is to find the suitable value of $K$ that yields minimum value of $\mathcal{C}$. Therefore, by differentiating \autoref{eq:4} with respect to $K$, and setting it to $0$, we obtain the optimum value of $K$ as:  $K^* = \sqrt{A}$.  Note that $K^*$ is independent of the fact that Clique requires half of the ASes to respond. This simplifies the design and $K^* = \sqrt{A}$ becomes an optimum target as the AS count $A$ changes. After plugging $A$ = 88,721, the total number of ASes in the world, we get $K^* \approx$ 298. This means that with number of subgroups fixed at 298, we will need minimum number of approvals for a transaction commitment. Minimum approvals will naturally have minimum propagation delays, which serves our main goal in \rc. 
+From \autoref{eq:4}, our objective is to find the suitable value of $K$ that yields minimum value of $\mathcal{C}$. Therefore, by differentiating \autoref{eq:4} with respect to $K$, and setting it to $0$, we obtain the optimum value of $K$ as:  $K^* = \sqrt{A}$.  Note that $K^*$ is independent of the fact that the protocol requires half of the ASes to respond. This simplifies the design and $K^* = \sqrt{A}$ becomes an optimum target as the AS count $A$ changes. After plugging $A$ = 88,721, the total number of ASes in the world, we get $K^* \approx$ 298. This means that with number of subgroups fixed at 298, we will need minimum number of approvals for a transaction commitment. Minimum approvals will naturally have minimum propagation delays, which serves our main goal in \rc. 
 
 \subsection{Security Analysis}\label{sec:SA}
 In this section, we will analyze security properties of \rc in the light of the threat model. An adversary controlling one or more ASes will try to launch a partial or complete BGP attack on a target AS. In the following, we show how \rc defends against these attacks. 
@@ -467,26 +467,10 @@ If $\mathcal{V}$ and $\mathcal{A}$ belong to the same subgroup, the hijacking at
 Compromising 50\% of ASes within a subgroup can be costly in practice. In all the well-known attacks that have been launched against ASes, only one AS or ISP has been found to be the miscreant. Therefore, in practical settings, even if the subgroup size is small, a collusion of 50\% ASes is highly improbable. Furthermore, the adversary will also need support from 50\% of the total number of subgroups. Therefore, for a successful attack, the adversary would require half of the total ASes in the world to be on its side. Considering the associated cost, we conclude that \rc provides high security guarantees in adversarial settings.  
 
 
-% As shown in \textsection\ref{secc:tds}, we model the BGP packet as an ``Unspent Transaction Output'' (UTXO) transaction. Each prefix is locked with its corresponding AS, and if due to a change in the policy, the owner AS wants to assign its prefix to another AS, it will have to generate a new transaction that validates its ownership and shift ownership to the recipient AS. UTXO transaction ensures that a transaction input is fully consumed, meaning that a new prefix assignment invalidates the previous assignment. Additionally, in UTXO model, two transactions consuming same input are considered double-spent transactions. Therefore, in a partial hijacking, if an adversary generates a transaction that contains exact BGP prefix belonging to another AS, it can be treated a double-spent transaction. 
-
-% Consider a situation in which an adversarial AS $\mathpzc{a}_{x}$ attempts to hijack another AS $a_{x}$, where both ASes belong to the same subgroup ($\mathpzc{a}_{x}, a_{x} \in k_{x}$). $\mathpzc{a}_{x}$ will generate a transaction from consuming the UTXO of the owner $a_{x}.$ His transaction will be immediately rejected by the rest of the peers in the subgroup $k_{x}$. The only way the attacker might succeed is if he controls more than half of the ASes in the subgroup ($|k_{x}|/2 \in \mathcal{A}$). 
-
-% Now consider a situation in which an adversarial AS $\mathpzc{a}_{x}$ in subgroup $k_{x}$, tries to hijack an AS $a_{y}$ in subgroup $k_{y}$. Firstly, this would require $\mathpzc{a}_{x}$, to be the primary replica in $k_{x}$, in order to convey transaction to the global primary replica. The adversary will not broadcast transaction within its own subgroup ${k}_{x}$, since all peers will easily detect that $\mathpzc{a}_{x}$ is not the true owner of the prefixes announced in the transaction. Once the global primary $\mathcal{P}_{A}$ will forward transactions to other subgroups. Each subgroup will consult the global blockchain to see check if there is a previous owner of prefixes announced in the transaction. If 50\% subgroups behave honestly, the transaction will be rejected. 
-
-% In the interest of time, a policy of {\em subgroup agreement before global agreement}, can be enforced to raise the attack cost. For a new transaction, the subgroup primary would be required to first obtain the consensus within the subgroup before forwarding it to the global primary. In which case, partial hijacking can be detected locally. 
+\section{\rc Deployment and Evaluation}\label{sec:simulation}
+To evaluate \rc's performance in the wild, we set up
 
 
-
-
-
-% Let $A$ be the set of all autonomous systems over the Internet, where $A = {a_{1},a_{2},...,a_{n}}$. Let $B$ be the set of subgroups composed out of $A$, such that $B={b_{1},b_{2},...,b_{k}}$, where $B\in A$, and $k<n$.  For the common case, we assume the size of each subgroup in $B$ is equal, meaning that $|b_{1}| = |b_{2} = |b_{k}|.$  Let $\mathcal{L}_{bi}$ be the blockchain of an individual subgroup, and let $\mathcal{L}_{g}$ be the global blockchain. Let $t_{i}$ be the consensus time for a specific subgroup, and $t_{g}$, be the consensus time over the global blockchain. 
-
-% From \autoref{fig:PBFT}, we can observe that within a subgroup, the transaction starts from the primary replica, passes through four stages, and finally goes to the client. In each stage, each replica performs verification of the transaction and sends a response back. If we assume $f(x)$ to be a function that computes end-to-end delay in transaction verification and for a single replica $x$ within a subgroup $y$, then the aggregate time for $3f+1$ replicas $T_{l}$ can be computed as $T_{l} = \min\limits_{x \in y} f(x)$. This means that $T_{l}$ is the time taken by the $3f+1$'st replica, which is the minimum end-to-end transaction verification time. 
-
-% Now assume $T_{g}$ to be the time taken by the global primary replica to obtain response from $3f+1$ subgroups. As such, $T_{g}$ can be computed as $T_{g} =  \min (T_{l_{1}}, T_{l_{2}}, ..., T_{l_{3f+1}})$. This means that global confirmation time is the minimum time in which the global primary replica receives a response from $3f+1$ subgroups. 
-
-% Once a BGP route is announced by an AS, its subgroup primary replica sends it to the global primary replica, as well as other ASes within the subgroup. The global primary replica sends the BGP route to all other subgroups, and obtains their consent. Once the global primary replica has sufficient confirmations, the route is processed and updated in the global blockchain. Additionally, each subgroup updates its local blockchain accordingly. Now, in attack conditions, if the consensus over a false prefix is achieved prior to the route acceptance in conventional scheme, then the attack can be prevented.
-\section{Simulation and Results}\label{sec:simulation}
 In this section, we present simulations and experiments performed to validate our theoretical analysis. In particular, we focus on achieving quick consensus over a malicious route announcement. Since \rc will be deployed in parallel with the existing infrastructure, it will not mitigate the attack completely. Instead, within few seconds, we expect \rc to notify all ASes about the validity of the announced prefix. Once notified, ASes can discard the announcement to prevent further propagation, and curtail damages. Towards that, we draw parallels with the {\em YouTube} Hijacking of 2008, and show how \rc is able to provide effective countermeasures.  
 
 \begin{figure}[t]
@@ -523,7 +507,7 @@ To prevent a complete hijacking attack, \rc acquires consensus of subgroups and 
 
 To further evaluate the effectiveness of \rc, we contrast the consensus time with the timings of Youtube's attack. In \autoref{fig:YThijack}, we provide the timeline of the attack. It can be observed that during the attack duration, within 1 minute, 9 ASes were hijacked and within 20 minutes, 97 ASes were hijacked. Therefore, considering the short consensus time of \rc, we can assert with confidence that our system will notify the ASes about the attack while it is in its initial stages. Network operators can configure their rotuers to switch back to old routes once an attack is detected. 
 
-% To observe the real time application and usability of \rc, we compare the convergence of \rc with the hijacking propagation in case of {\em YouTube}{'s} BGP hijacking by {\em Pakistan Telecom} in 2008. It can be seen that by the time the protocol leads to hijacking of almost 2 ASes, \rc creates a consensus among all the ASes.
+
 \section{Discussion}\label{sec:discussion}
 As shown by simulation, \rc is able to expose the BGP announcements to all ASes in 54.24 seconds. More specifically, for a partial hijacking, as outlined in \autoref{fig:YThijack}, \rc is able to obtain consensus from all ASes within 200 milliseconds. If \rc was deployed by ASes during the Youtube hijacking, it would have been able to prevent the hijacking when only 4 ASes were compromised. This could have saved traffic and revenue loss for Youtube AS. 
 
@@ -537,9 +521,6 @@ In this section, we review notable efforts done to secure Internet routing proto
 
 There has been extensive research carried out to secure BGP without the use of blockchains. Hu~\etal\cite{HuWL15} proposed Cooperative Information Sharing Model (CoISM) to improve shortcomings of information sharing through BGP monitoring. CoISM does not modify the current processing of BGP and can be implemented to validate real BGP routes and detect fake BGP routes. Moreover, it can be deployed in various inter-domain management applications, such as intrusion detection and failure analysis of routing. Camacho~\etal\cite{CamachoGBV13} proposed BGP eXtended Multipath (BGP-XM) for transit Autonomous Systems. BGP-XM uses algorithms including K-Best Route Optimizer  to strengthen BGP multi-path routing. BGP-XM does not violate BGP functionalities when selecting routes among different ASes paths. Schlamp~\etal\cite{SchlampHJCB16} proposed a ``Hijacking Event Analysis Program'' {\em HEAP}; to filter data sources and rate validity of BGP sub-prefixes in order to defend against hijacking. 
 
-% To justify our choice of using the consensus scheme for blockchain application, we consulted work done by Bano~\etal\cite{BanoSAAMMD17}, that explores all popular consensus schemes including proof-of-work, proof-of-stake, and Byzantine fault tolerance. They evaluated the performance of each scheme using various parameters such as scalability, throughput, and security. From that, we derived our motivation to use BFT for our work. 
-
-% Ahmad~\etal\cite{AhmadSBM18} proposed a blockchain-based solution to secure audit logs against the physical access attack and the remote vulnerability attack. To that end, they used BFT protocol to augment consensus among the untrusted parties that are associated with audit log applications. They used a property appraisal application provided by Clear Village Inc. to model their design and experimented with varying payload size.
 
 
 
