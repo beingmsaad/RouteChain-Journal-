@@ -215,30 +215,53 @@ In complete attacks, the adversarial AS announces more specific prefixes than th
 \subsection{Blockchains} \label{sec:BC}
 Blockchain technology has introduced a new paradigm in distributed systems with applications spanning cryptocurrencies, smart contracts, distributed provenance, and censorship resistance~\cite{NeisseSN17,Omohundro14,GovernatoriIMRS18,AhmadSBM18}. With promising guarantees including immutable and append-only data management in a decentralized system, blockchains are well suited to create provenance and prevent fraud in a trust-less environment. 
 
-Blockchains use various consensus protocols to arbitrate trust among networks and entities. Some of the well-known consensus protocols include the proof-of-work (PoW), proof-of-stake (PoS), proof-of-elapsed time (PoET), proof-of-authority (PoA), and the practical Byzantine fault tolerance (PBFT) \cite{SaadM18,SaadNKM18}. Each consensus protocol hasscheme has its merits and caveats. However, best suited to the requirements of our design, we use a modified form of PoA, known as {\em Clique}. For more details on consensus schemes and their uses, we refer the reader to \cite{Bano:2017b}.
-
-% While PoW is highly scalable, it is energy inefficient and suffers from low throughput. On the other hand, BFT achieves high throughput, but it has low scalability, and high message complexity. However, specific to the requirements of \rc, we envision that BFT can be effectively tailored to meet the design goals of our system. 
+Blockchains use various consensus protocols to arbitrate trust among networks and entities. Some of the well-known consensus protocols include the proof-of-work (PoW), proof-of-stake (PoS), proof-of-elapsed time (PoET), proof-of-authority (PoA), and the practical Byzantine fault tolerance (PBFT) \cite{SaadM18,SaadNKM18}. Each consensus protocol its benefits and limitations which we show in~\cite{tab:ca}. Among the five consensus protocols, we selected PoS, PoA (Clique), and PoET for \rc due to (1) high scalability, (2) energy efficiency, (3) scalability, and (4) high throughput.  In the following, we briefly describe key features of the three conseneus protocols.  
 
 
-
-\begin{figure}[t]
+\begin{table*}
 \centering
-\includegraphics[width=0.45\textwidth]{fig/bgp_clique_roundrobin.pdf}
-%\caption{  Selection of ASes responsible to propose blocks in Clique. The ASes are selected in a round-robin fashion with a primary and a set of secondary nodes such that each AS is only allowed to propose a block every $N/2 + 1$   } 
-\caption{Clique uses a round-robin scheme to select primary node, and two secondary nodes, the primary is responsible for proposing a new block. In case of failure of a primary node the block is proposed by the secondary nodes. Note: R1 is the primary and R2 and R3 and secondary for the first epoch, for the second epoch R2 is the primary and R3 and R4 and the secondary. }
-\label{fig:Clique}
-\end{figure}
+\caption{Comparison of the consensus protocols used in blockchain systems. The values reported in the table are obtained from prior works in \cite{nakamoto2008bitcoin,weipplCCS2016,sompolinsky2013accelerating}. }
+\label{tab:ca} 
+\scalebox{0.99}{
+\begin{tabular}{l|c|c|c|c|c}
+\textbf{Properties}  & \textbf{PoW}       & \textbf{PoS}       & \textbf{PBFT}  & \textbf{Clique}   & \textbf{PoET}  \\ \hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Blockchain Type\\ \end{tabular}}         & Permisssionless & Permissionless & Permissioned & Permissioned & Permissionless       \\ \hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Trust Model\\ \end{tabular}} & Untrusted & Untrusted &  Semi-trusted & Semi-trusted & Untrusted \\ \hline
+\textbf{Scalability}                                                         & High               & High                      & Low  & High & High                      \\ \hline
+\textbf{Throughput}                                                          & \textless{}10      & \textless{}1,000 &  \textless{}10,000  & - - &1,000 \\ \hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Fault Tolerance\\ \end{tabular}} & 50\%               & 50\%                      & 33\%  & 50\% & 50\%                            \\ \hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Energy Efficient\\\end{tabular}}         & No & Yes & Yes   & Yes & Yes      \\ \hline
+
+\end{tabular}}
+\end{table*}
+ tailored to meet the design goals of our system. 
 
 
-\BfPara{{\em Clique}} \label{sec:cq}
-{\em Clique} is a PoA-based consensus scheme that is fast, scalable, and has high fault tolerance. In {\em Clique}, a primary is chosen to order transactions and broadcast to the nodes for each round of block execution. In contrast to PBFT, where block execution takes four phases with $O(n^2)$ message complexity, a block is executed in a single phase with $O(1)$ message complexity in {\em Clique}. For each epoch, a primary replica is selected in a round-robin, and the view of the primary is replicated on the mutually shared ledger. Moreover, {\em Clique} has a high fault tolerance and can endure up to $f/2$ faulty replicas. In \autoref{fig:Clique}, we show how a primary replica is selected in {\em Clique}, and later in \textsection\ref{sec:consen} we present the design implementation of {\em Clique} in our system. 
+
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=0.45\textwidth]{fig/bgp_clique_roundrobin.pdf}
+
+% \caption{Clique uses a round-robin scheme to select primary node, and two secondary nodes, the primary is responsible for proposing a new block. In case of failure of a primary node the block is proposed by the secondary nodes. Note: R1 is the primary and R2 and R3 and secondary for the first epoch, for the second epoch R2 is the primary and R3 and R4 and the secondary. }
+% \label{fig:Clique}
+% \end{figure}
 
 {\color{blue}{
+\BfPara{{\em Clique}} \label{sec:cq}
+{\em Clique} is a PoA-based consensus scheme that is fast, scalable, and has high fault tolerance. In {\em Clique}, a primary replica is selected to order transactions in a block and broadcast that block to the other nodes. Although the process of transaction ordering is similar to PBFT, however, {\em Clique} relies on eventual consistency which reduces the message complexity from  $O(n^2)$ to  $O(1)$, thus favoring scalability. Moreover, unlike PBFT, Clique has a high fault tolerance and it can tolerate up to $f/2$ faulty replicas. In other words, {\em Clique} can prevent a BGP hijack as long as 50\% ASes behave honestly, which is a fair assumption to make in practice. 
+
+
+
+
 \BfPara{{\em PoS}} \label{sec:pos}
-PoS protocol addresses the energy inefficiency of PoW and replaces the computational requirements with the notion of stake in the system \cite{king2012ppcoin}. In PoS cryptocurrencies, the stake is the number of coins owned by a user, which are then used to make bids during a block auction process. The auction winner is allowed to propose a block. Due to the growing concerns about the energy consumption in PoW, cryptocurrencies including Ethereum are switching to PoS. Despite the obvious benefits, PoS has its limitations, including the problem of ``{\em the rich gets richer}'' \cite{BentovGM16}. The auction naturally favors rich miners who are rewarded with a transaction fee. As a result, their stake further increases which allows them to win the subsequent auctions as well. 
+The PoS protocol is similar to an auction process in which the each participant bids for a block. The participant with the highest bid is allowed to order transactions and release them to the rest of the network. PoS can be realized in \rc by assigning fixed tokens to each AS and the AS using those tokens order routes in the block. For correct ordering (\ie one that avoids attacks), the AS can be rewarded more tokens to promote the honest behavior. As show in~\autoref{tab:ca}, as long as no AS possesses a majority of tokens, PoS-based \rc construction will be able to prevent the BGP hijack. 
 
 \BfPara{{\em PoET}} \label{sec:poet}
-PoET protocol uses Intel Software Guard Extensions (SGX) to execute the ``leader election'' code in a secure enclave. Each blockchain node executes the code, generate a random wait time during which the node remains idle. Once the wait time expires, the node is allowed to propose a block~\cite{chen2017security}. PoET randomizes the leader election process to maintain decentralization. In contrast, PoW and PoS may become centralized if a node acquires an exceptionally high hash rate or has a high balance for auction. Currently, Hyperledger Sawtooth supports the PoET protocol \cite{Sawtooth}.
+PoET leverages the security properties of Trusted Execution Environment (TEE) to randomly elect a leader in the network who then orders transactions and proposes a block. PoET is currently deployed in the Hyperledger Sawtooth using Intel Software Guard Extensions (SGX)\cite{Sawtooth}.  The randomized nature of leader election ensures decentralization and guarantees the blockchain consistency under the honest majority assumption. 
+
+
+
+
 }}
 
 \section{Problem Statement and Threat Model}\label{sec:ps}
@@ -337,35 +360,18 @@ In \textsection\ref{sec:mind}, we derive optimal value of the number of subgroup
 \end{center}
 \end{figure}
 
-% ASes could be partitioned using a number of criteria, however to reduce the round-trip delay and contain a BGP attack in a geographical location, we propose we propose grouping ASes in geographical location in a group. So ASes in Central Florida would be in one group, and the ASes in North Florida will be in another group, and so on. We will be grouping optimal number of Ases in each group such that the number of ASes in group will be between $a_{max}$ and $a_{min}$, later on in the result section we will look into an optimal values of these parameters. 
 
-% The internet is continuously evolving and the network structures changes, and more ASes or added or removed in a geographical region. To support these changes to network topology, out design automatically evolves and Ases are added or removed from the groups, and the groups can be merged and split to ensure a timely consensus among the blockchain peers. When the number of ASes in a group reach $a_{max}$ value the group is split into two groups, \eg if the ASes in Central Florida reach  $a_{max}$ value the group is split in two groups. On the other hand if the number of ASes go below the $a_{min}$ value, this group will be merged with a group geographically closest to this group. 
 
 \subsection{Consensus Mechanism}\label{sec:consen}
-As mentioned in \textsection\ref{sec:cq}, in \rc, we use {\em Clique} as the consensus protocol. For each subgroup in $K$, a primary replica $\mathcal{P}_{K}$ is selected to send transactions to other replicas (ASes) as shown in \autoref{fig:Clique_fork}. $\mathcal{P}_{K}$ is responsible for receiving transactions, ordering transactions, computing a block, and broadcasting it to the other replicas. This process is carried out in one epoch, and at each epoch, a new primary is selected to continue the procedure. The selection of a primary follows a round-robin scheme. Therefore, in a subgroup size of $|k_{i}|$, if an AS becomes the primary, it has to wait for $|k_{i}|-1$ epochs to become the primary again.  
 
-% adding a new block to blockchain, once the block produced by primary replica is committed and the next AS take the responsibility to add the next block and this process continues in round robin manner and the, and the same primary replica is give this responsibility after $n-1$ blocks are added to the system, when n is the number of nodes in a subgroup.
-%In \rc, for each subgroup in $K$, a primary replica $\mathcal{P}_{K}$ is selected to send transactions to other replicas (ASes). 
 
-In {\em Clique}, it is possible that a block broadcasted by a primary gets does not reach all replicas in time. This can happen due to network delays or protocol malfunction. Moreover, it is also possible that in such non-deterministic network behavior, the block of the next primary arrives at a replica before the block of the current primary. This may lead to a disordered sequence of blocks or a fork, as shown in \autoref{fig:Clique_fork}. 
+As mentioned in \textsection\ref{sec:cq}, in use three consensus protocols in \rc. Based on each protocol's specifications, a primary replica $\mathcal{P}_{K}$ is selected from each subgroup $K$ to send transactions to other replicas (ASes) as shown in \autoref{fig:Clique_fork}. $\mathcal{P}_{K}$ is responsible for receiving transactions, ordering transactions, computing a block, and broadcasting it to the other replicas. This process is carried out in one epoch, and at each epoch, a new primary is selected to continue the procedure. 
 
-Resolving a fork in {\em Clique} is straightforward. Since the identity of the primary replica is known, therefore for each epoch, all ASes expect the new block with the identity of the primary replica, as shown in \autoref{fig:packet_bc}. Therefore, when blocks are received out of the order, replicas can resolve the forks and align their view of the blockchain. We illustrate this aspect of fork formation and resolution in \autoref{fig:Clique_fork}. 
-
-% In \autoref{fig:Clique_fork}, a fork is taking place in clique, Primary authority $AS_2$ proposes a new block, and another non primary authority $AS_3$ also proposes a block new block, which results in a fork at $AS_3$ and $AS_4$. $AS_3$ and $AS_4$ detects the fork the subsequent block is received and the effected (ASes) would correct the fork by taking the correct block.
-
-% Figure 3: A fork occurring in Clique. Authority a4 has the block proposed by a3 as second
-% block, while a5 has the block proposed by a2. Eventually, a4 replaces the block proposed by a3
-% with that proposed by a2 because the latter has a higher score.
-
-% These transactions are BGP prefixes announced by an AS. Once the announcement is made, the primary replica receives it and sends it to all the replicas (ASes) within the group. These replicas consult their blockchain to see any routing conflicts. Assuming there are $f$ malicious replicas, in a subgroup, if the primary replica receives approval from $3f+1$ replicas, then it approves the transaction and appends it to the blockchain. 
-
-% In the global blockchain, once the primary replica obtains approval from within the subgroup, it sends the group approval to the global primary replica. Assuming that there are $g$ faulty groups of ASes, if the global primary replica receives approval from $3g+1$ groups, it executes the transaction and appends to the global blockchain. 
 
 
 \BfPara{Transaction Data Structure}\label{secc:tds}
 In \autoref{fig:packet}, we show the data structure of transaction generated by an AS. The transaction consists of a transaction ID field, an autonomous system number (ASN) field, and the BGP packet. For details on the structure of BGP packet, we refer the reader to~\cite{rfc4271} Once this transaction gets approved, it is updated in the global blockchain ledger. 
 
-% transaction packet, which consists of Id, which is a unique value, and we are using a GUID for it, Autonomous System Number(ASN) is a special number assigned by IANA that uniquely identifies an autonomous system, and BGP Packet, that is the complete BGP packet that was sent for this transaction, to look at the details of the packet we refer the reader to .
 
 \begin{figure}[t]
 \begin{center}
@@ -397,11 +403,9 @@ This blockchain data structure makes all ASes within a subgroup see all the BGP 
 
 
 \subsection{Analysis of {\em RouteChain}} \label{sec:ana}
-In this section, we perform analysis of \rc in terms of our design requirements and performance objectives. 
+In this section, we perform analysis of \rc in terms of design requirements and performance objectives. 
 \subsubsection{Design Analysis}\label{sec:da}
-In a {\em Clique} blockchain consisting of $N$ replicas, a transaction requires approval from $N/2$ replicas. In \rc, we make a minor adjustments to {\em Clique} such that the primary replica not only sends transactions to other replicas but also awaits an approval response. In the conventional design of {\em Clique}, the primary only broadcasts a transaction or a block and all other replicas accept the payload. However, suitable to our design, we expect other replicas to send back their approval for the transaction.
-
-Additionally, the blockchain of a subgroup gets updated only if the approved transaction concerns the routing paths of ASes within the subgroup. Otherwise, only the subgroup decision is sent back to the global primary. We take this approach for two reasons. Firstly, a subgroup must only update its blockchain if a transaction directly concerns its routing path. Otherwise,  maintaining routing paths of other subgroups is an unnecessary overhead. Secondly, this also reduces the size of the blockchain, making transaction verification faster. 
+In \rc, the primary replica not only sends transactions to other replicas but also awaits an approval response. Additionally, the blockchain of a subgroup gets updated only if the approved transaction concerns the routing paths of ASes within the subgroup. Otherwise, only the subgroup decision is sent back to the global primary. We take this approach for two reasons. First, a subgroup must only update its blockchain if a transaction directly concerns its routing path. Otherwise,  maintaining routing paths of other subgroups is an unnecessary overhead. Second, this also reduces the size of the blockchain, making transaction verification faster. 
 
 The process of obtaining transaction approval involves:
 \begin{enumerate*}
