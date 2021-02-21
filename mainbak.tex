@@ -477,8 +477,15 @@ Compromising 50\% of ASes within a subgroup can be costly in practice. In all th
 % Now assume $T_{g}$ to be the time taken by the global primary replica to obtain response from $3f+1$ subgroups. As such, $T_{g}$ can be computed as $T_{g} =  \min (T_{l_{1}}, T_{l_{2}}, ..., T_{l_{3f+1}})$. This means that global confirmation time is the minimum time in which the global primary replica receives a response from $3f+1$ subgroups. 
 
 % Once a BGP route is announced by an AS, its subgroup primary replica sends it to the global primary replica, as well as other ASes within the subgroup. The global primary replica sends the BGP route to all other subgroups, and obtains their consent. Once the global primary replica has sufficient confirmations, the route is processed and updated in the global blockchain. Additionally, each subgroup updates its local blockchain accordingly. Now, in attack conditions, if the consensus over a false prefix is achieved prior to the route acceptance in conventional scheme, then the attack can be prevented.
+
+
 \section{Simulation and Results}\label{sec:simulation}
-In this section, we present simulations and experiments performed to validate our theoretical analysis. In particular, we focus on achieving quick consensus over a malicious route announcement. Since \rc will be deployed in parallel with the existing infrastructure, it will not mitigate the attack completely. Instead, within few seconds, we expect \rc to notify all ASes about the validity of the announced prefix. Once notified, ASes can discard the announcement to prevent further propagation, and curtail damages. Towards that, we draw parallels with the {\em YouTube} Hijacking of 2008, and show how \rc is able to provide effective countermeasures.  
+In this section, we evaluate the performance of \rc by deploying a blockchain testbed that supports PoS, PoET, and {\em Clique}. Taking into account $K$=298, we set up 298 blockchain nodes in Docker containers and deployed them across five different cities in the world including San Francisco, New York, Singapore, London, and Frankfurt. The motivation to set up nodes across different cities was to obtain realistic values for transaction confirmation by acknowledging propagation delay over the Internet. The testbed nodes were deployed on the {\em digital ocean data center}, which is cloud service provider that hosts its data centers globally. All nodes in the data center were assigned a public IP address and the IP addressing mapping was specified in the Docker configuration file. The Docker containers were aggregated in servers and each server had an Intel Xeon processor with 4 cores, 16GB RAM, and 500GB hard drive.
+
+
+To enable the message exchange among the blockchain nodes, we set up a NodeJS-based communication framework that specified the overlay topology among nodes. We also installed a middleware at each container that encoded the rules of each consensus protocol. Each node used HTTP protocol with GET and POST methods to exchange data (\ie transactions and blocks) with other nodes. To minimize delay in the overlay communication model, we set up a completely-connected overlay topology. 
+
+
 
 \begin{figure}[t]
 \begin{center}
@@ -495,6 +502,8 @@ In this section, we present simulations and experiments performed to validate ou
 \label{fig:simComplete}
 \end{center}
 \end{figure}
+
+
 
 
 
