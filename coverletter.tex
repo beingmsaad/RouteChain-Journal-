@@ -1,0 +1,48 @@
+\documentclass{abmart}
+%\usepackage[left=1in,right=1in,top=1in]{geometry}
+\newcommand{\rc}{{{\em RouteChain }}}
+% \renewcommand{\baselinestretch}{0.91}
+\title{\rc: Towards Blockchain-based Secure and Efficient BGP Routing}
+\author{Muhammad Saad, Afsah Anwar, Ashar Ahmad, Hisham Alasmary, Murat Yuksel, and David Mohaisen}
+\journal{Journal of Network and Computer Applications}
+% \doi{12345}
+
+\begin{document}
+
+\maketitle
+
+\textbf{Dear Editor-in-Chief and Area Editor}, 
+
+Enclosed please find our submission titled ``\rc: Towards Blockchain-based Secure and Efficient BGP Routing'' for peer-review and potential publication in Journal of Network and Computer Applications.
+
+Routing on the Internet is defined among autonomous systems (ASes) based on a weak trust model where it is assumed that ASes are honest. While this trust model strengthens the connectivity among ASes, it also results in an attack surface that can be exploited to hijack the routing paths. One such attack is known as the BGP prefix hijacking, in which a malicious AS broadcasts IP prefixes that belong to a target AS, thereby hijacking its traffic. In this paper, we propose \rc: a blockchain-based secure BGP routing system that counters BGP hijacking and maintains a consistent view of the Internet routing paths. Towards that, we leverage provenance assurance and tamper-proof properties of blockchains to augment trust among ASes. We group ASes based on their geographical (network) proximity and construct a bi-hierarchical blockchain model that detects false prefixes prior to their spread over the Internet. We evaluate \rc using three different consensus protocols and show its effectiveness by drawing a case study with the Youtube hijacking of 2008. Our results show that \rc can efficiently detect false prefix announcements and prevent BGP attacks over the Internet.  
+
+\vspace{-2mm}
+\noindent\textbf{Summary of Differences:} This paper builds on our previously published paper at IEEE  International Conference on Blockchain and Cryptocurrencies (ICBC 2019), titled ``RouteChain: Towards Blockchain-based Secure and Efficient BGP Routing'' Size-wise, the submitted work is eleven pages (double-column template), while the previously published work in ICBC was nine pages (double-column template). Content-wise, the submitted manuscript advances the previous work in many ways: 
+
+\noindent\textbf{Technical Differences}:  
+\vspace{-4mm}
+\begin{enumerate}
+\itemsep-0.3em 
+    \item In the conference version, we only used the {\em Clique} consensus protocol for \rc. In the journal version, we use three consensus protocols, namely Proof-of-Stake (PoS), {\em Clique}, and Proof-of-Elapsed Time (PoET). We provide a detailed description of each consensus protocol and how they can be feasibly deployed in \rc. 
+    \item Previously, we only conducted simulations to estimate the consensus time required to prevent the BGP attack. For the journal version, we developed a testbed of blockchain nodes and deployed them in different ASes. We implemented the three consensus protocols in our testbed and measured the realistic consensus time that is expected in practice. 
+    \item Our testbed results outperform the simulation scenarios. In simulations, the minimum subgroup consensus time was estimated around 200 milliseconds. However, in the testbed evaluation, the minimum subgroup consensus time was measured to be 5 milliseconds which demonstrates that \rc is highly effective in the current network of ASes. 
+  
+\end{enumerate}
+
+\vspace{-3mm}
+\noindent\textbf{Writing Differences}: 
+Besides improving the writing of several sections in the paper, the following sections contain new contents that did not appear in the previous publication: Introduction (Section 1), Background and Preliminaries (Section 2), and RouteChain Deployment and Evaluation (Section 5). 
+
+
+We believe that the work at hand addresses an important and timely problem through a concrete design evaluated with actual implementations across multiple evaluation metrics. We also believe that your readership and reviewers will find the work timely, significant, and interesting. Should there be any questions, please feel free to contact me.
+
+David Mohaisen (corresponding author)\\
+Associate Professor\\
+University of Central Florida\\ 
+mohaisen@ucf.edu\\
+
+
+
+
+\end{document}

@@ -23,7 +23,6 @@
 
 
 \newcommand{\BfPara}[1]{{\noindent\bf#1.}\xspace}
-\renewcommand{\baselinestretch}{0.96} 
 \newcommand{\bc}{{Bitcoin}\xspace}
 \newcommand{\rc}{{{\em RouteChain}}\xspace}
 \newcommand{\bcc}{{Blockchain}\xspace}
@@ -119,7 +118,7 @@
 
 \begin{document}
 \begin{frontmatter}
-\title{RouteChain: Towards Blockchain-based \\Secure and Efficient BGP Routing}
+\title{\rc: Towards Blockchain-based \\Secure and Efficient BGP Routing}
 \author[]{Muhammad Saad}
 \ead{saad.ucf@knights.ucf.edu}
 \author[]{Afsah Anwar}
@@ -130,7 +129,7 @@
 \ead{hisham@Knights.ucf.edu}
 \author[]{Murat Yuksel}
 \ead{Murat.Yuksel@ucf.edu}
-\author[]{Aziz Mohaisen\corref{mycorrespondingauthor}}
+\author[]{David Mohaisen\corref{mycorrespondingauthor}}
 \cortext[mycorrespondingauthor]{Corresponding author}
 \ead{mohaisen@cs.ucf.edu}
 \fntext[myfootnote]{This paper is an extension of an earlier work that appeared in IEEE International Conference on Blockchain and Cryptocurrency (ICBC 2019)~\cite{saad2019routechain}}
@@ -533,7 +532,7 @@ There has been extensive research carried out to secure BGP without the use of b
 
 
 \section{Conclusion}\label{sec:conclusion}
-In this paper we present a blockchain-based secure BGP routing system called \rc. \rc uses a bi-hierarchical blockchain structure and three consensus protocols to facilitate fast and tamper-proof route management. While the blockchain ledger provides a validation source for all prefixes, {\em Clique} enables swift consensus among ASes over the nature prefix broadcast. Combined, these two properties enable \rc to act as standalone security service that can be incrementally deployed in parallel with current operations of ASes. We validate achievable objectives of \rc through discreet-event simulations, and our results show that \rc can effectively curtail a BGP attack while it is in its initial stage.  
+In this paper we present a blockchain-based secure BGP routing system called \rc. \rc uses a hierarchical blockchain structure and three consensus protocols to facilitate fast and tamper-proof route management. While the blockchain ledger provides a validation source for all prefixes, the consensus protocols enable swift consensus among ASes over the nature of the prefix. Combined, these two properties enable \rc to act as standalone security service that can be incrementally deployed in parallel with current operations of ASes. We develop a blockchain testbed to evaluate the effectiveness of \rc using PoS, {\em Clique}, and PoET consensus protocols. Our results show that \rc is capable of preventing a BGP attack in all three protocols with {\em Clique} being the most suitable protocol choice due to low consensus time and a high throughput. 
 
 
 % \BfPara{Acknowledgement:}This work is supported by Air Force Material Command award FA8750-16-0301 and Global Research Lab program of the National Research Foundation NRF-2016K1A1A2912757.
